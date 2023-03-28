@@ -10,6 +10,7 @@ import { useForm } from "../../shared/hooks/form-hook";
 import "./Auth.css";
 import Button from "../../shared/components/FormElements/Button";
 import { AuthContext } from "../../shared/context/auth-context";
+import { registerUser } from "../../services/users";
 
 function Auth() {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -46,6 +47,20 @@ function Auth() {
 
   const authSubmitHandler = async (e) => {
     e.preventDefault();
+    const { email, name, password } = formState.inputs;
+    if (!isLoginMode) {
+      try {
+        const response = await registerUser({
+          email: email.value,
+          name: name.value,
+          password: password.value,
+        });
+        console.log("response", response);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     console.log(formState.inputs);
     login();
   };

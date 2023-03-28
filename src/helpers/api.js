@@ -6,6 +6,11 @@ export const BASE_API_PATH = "/api/";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_ENDPOINT ?? "http://localhost:5000",
+  headers: {
+    common: {
+      "Content-Type": "application/json",
+    },
+  },
 });
 
 //setting auth (if jwt present)
@@ -14,3 +19,5 @@ const token = localStorage.getItem("token");
 if (token) {
   instance.defaults.headers["x-access-token"] = token;
 }
+
+export default instance;
