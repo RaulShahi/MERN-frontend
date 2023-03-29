@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import AllPlaces from "./places/pages/AllPlaces";
 import NewPlace from "./places/pages/NewPlace";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import UserPlaces from "./places/pages/UserPlaces";
@@ -22,6 +23,7 @@ function App() {
     routes = (
       <Switch>
         <Route path="/" component={Users} exact />
+        <Route path="/places" exact component={AllPlaces} />
         <Route path="/:userId/places" exact component={UserPlaces} />
         <Route path="/places/new" exact component={NewPlace} />
         <Route path="/places/:placeId" exact component={UpdatePlace} />
@@ -32,6 +34,7 @@ function App() {
     routes = (
       <Switch>
         <Route path="/" component={Users} exact />
+        <Route path="/places" exact component={AllPlaces} />
         <Route path="/:userId/places" exact component={UserPlaces} />
         <Route path="/auth" exact component={Auth} />
         <Redirect to="/auth" />

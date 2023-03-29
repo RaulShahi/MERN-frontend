@@ -64,6 +64,7 @@ function Auth() {
         return;
       } catch (err) {
         console.log(err);
+        return;
       }
     }
     try {

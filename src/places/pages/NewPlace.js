@@ -7,6 +7,8 @@ import {
 import "./PlaceForm.css";
 import Button from "../../shared/components/FormElements/Button";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttp } from "../../shared/hooks/http-hook";
+import { addPlace } from "../../services/places";
 
 function NewPlace() {
   const [formState, inputHandler] = useForm(
@@ -17,11 +19,17 @@ function NewPlace() {
     },
     false
   );
+  const { isLoading, error, clearError, sendRequest } = useHttp();
 
-  const placeSubmitHandler = (e) => {
+  const placeSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(formState.inputs);
   };
+  //   const {title, description, address} = formState?.inputs
+  //   try{
+  //     const response = await sendRequest(addPlace,{title:title?.value, description: description?.value, address: address?.value})
+  //   }catch(err){}
+  //   console.log(formState.inputs);
+  // };
 
   return (
     <form className="place-form" onSubmit={placeSubmitHandler}>
@@ -45,7 +53,7 @@ function NewPlace() {
       <Input
         id="address"
         element="input"
-        label="Description"
+        label="Address"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid address."
         onInput={inputHandler}

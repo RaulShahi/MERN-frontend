@@ -11,8 +11,12 @@ function Users() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await sendRequest(getAllUsers);
-      setUsers(response?.data?.users);
+      try {
+        const response = await sendRequest(getAllUsers);
+        setUsers(response?.data?.users);
+      } catch (err) {
+        console.log(err);
+      }
     };
     fetchUsers();
   }, []);
