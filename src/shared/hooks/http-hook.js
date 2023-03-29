@@ -1,32 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 
-export const useHttp = (fn) => {
+export const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [data, setData] = useState();
 
   const clearError = () => {
     setError(null);
   };
 
-  useEffect(() => {
+  const sendRequest = useCallback(async (fn, payload) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
+      const response = await fn(payload ?? payload);
+      if (!response?.status) {
+        throw new Error(response?.data?.message);
+      }
+      setIsLoading(false);
 
-      const sendRequest = async () => {
-        const response = await fn();
-        if (!response?.status) {
-          throw new Error(response?.data?.message);
-        }
-        setData(response);
-      };
-      sendRequest();
+      return response;
     } catch (err) {
       setError(err.message);
-    } finally {
       setIsLoading(false);
+
+      throw err;
     }
   }, []);
 
-  return { isLoading, error, clearError, data };
+  return { isLoading, error, clearError, sendRequest };
 };

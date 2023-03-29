@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { User } from "../../model/userModal";
 import { getAllUsers } from "../../services/users";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
@@ -7,7 +6,16 @@ import { useHttp } from "../../shared/hooks/http-hook";
 import UsersList from "../components/UsersList";
 
 function Users() {
-  const { isLoading, error, clearError, data } = useHttp(getAllUsers);
+  const { isLoading, error, clearError, sendRequest } = useHttp();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await sendRequest(getAllUsers);
+      setUsers(response?.data?.users);
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <>
@@ -17,7 +25,7 @@ function Users() {
           <LoadingSpinner />
         </div>
       )}
-      <UsersList items={data?.data?.users} />
+      <UsersList items={users} />
     </>
   );
 }

@@ -17,8 +17,6 @@ import { useHttp } from "../../shared/hooks/http-hook";
 
 function Auth() {
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(undefined);
 
   const { login } = useContext(AuthContext);
 
@@ -35,30 +33,7 @@ function Auth() {
     },
     false
   );
-  const {
-    isLoading: signupLoading,
-    error: signUpError,
-    clearError: setSignupError,
-    data: registerData,
-  } = useHttp(() =>
-    registerUser({
-      email: formState.email.value,
-      name: formState.name.value,
-      password: formState.password.value,
-    })
-  );
-
-  const {
-    isLoading: logInLoading,
-    error: logInError,
-    clearError: setLoginError,
-    data: loginData,
-  } = useHttp(() =>
-    registerUser({
-      email: formState.email.value,
-      password: formState.password.value,
-    })
-  );
+  const { isLoading, error, clearError, sendRequest } = useHttp();
 
   const switchModeHandler = () => {
     if (!isLoginMode) {
@@ -80,44 +55,30 @@ function Auth() {
     const { email, name, password } = formState.inputs;
     if (!isLoginMode) {
       try {
-        setIsLoading(true);
-        const response = await registerUser({
-          email: email.value,
-          name: name.value,
-          password: password.value,
+        await sendRequest(registerUser, {
+          email: email?.value,
+          name: name?.value,
+          password: password?.value,
         });
-        setIsLoading(false);
-        if (!response?.status) {
-          throw new Error(response?.data?.message);
-        }
-
         login();
+        return;
       } catch (err) {
-        setIsLoading(false);
         console.log(err);
-        setError(err.message || "Failed to sign up.Please try again later.");
       }
-    } else {
-      try {
-        setIsLoading(true);
-        const response = await loginUser({
-          email: email.value,
-          password: password.value,
-        });
-        if (!response.status) {
-          throw new Error(response?.data?.message);
-        }
-        setIsLoading(false);
-        login();
-      } catch (err) {
-        setIsLoading(false);
-        setError(err.message || "Failed to sign in. Please try again later.");
-      }
+    }
+    try {
+      await sendRequest(loginUser, {
+        email: email?.value,
+        password: password?.value,
+      });
+      login();
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
     <>
-      <ErrorModal error={error} onClear={() => setError(undefined)} />
+      <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
