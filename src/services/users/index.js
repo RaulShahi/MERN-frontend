@@ -19,3 +19,12 @@ export const registerUser = async (payload) => {
     return getApiResponse(err?.response);
   }
 };
+
+export const loginUser = async (payload) => {
+  try {
+    let response = await API.post(`${Apis.Login}`, payload);
+    return getApiResponse(response);
+  } catch (err) {
+    return getApiResponse(err?.response);
+  }
+};
