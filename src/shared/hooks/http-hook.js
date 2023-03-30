@@ -8,12 +8,12 @@ export const useHttp = () => {
     setError(null);
   };
 
-  const sendRequest = useCallback(async (fn, payload) => {
+  const sendRequest = useCallback(async ({ fn, payload, params }) => {
     setIsLoading(true);
     try {
-      const response = await fn(payload ?? payload);
+      const response = await fn({ payload, params });
       if (!response?.status) {
-        throw new Error(response?.data?.message);
+        throw new Error(response?.message);
       }
       setIsLoading(false);
 

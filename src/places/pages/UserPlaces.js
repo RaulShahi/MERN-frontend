@@ -1,33 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PlaceList from "../components/PlaceList";
 import { Place } from "../../model/placeModal";
 import { useParams } from "react-router-dom";
-
-export const DUMMY_PLACES = [
-  new Place(
-    "p1",
-    "Empire State Building",
-    "One of the most famous sky scrapers in the world!",
-    "https://lh3.googleusercontent.com/p/AF1QipNVlM5lo7fIJrmvjN4EOrTMiQjDgDyTfw7ATdV6=s680-w680-h510",
-    "20 W 34th St, New York, NY 10001",
-    "u1"
-  ),
-  new Place(
-    "p2",
-    "Bob State Building",
-    "One of the most famous sky scrapers in the world!",
-    "https://lh3.googleusercontent.com/p/AF1QipNVlM5lo7fIJrmvjN4EOrTMiQjDgDyTfw7ATdV6=s680-w680-h510",
-    "20 W 34th St, New York, NY 10001",
-    "u2"
-  ),
-];
+import { useHttp } from "../../shared/hooks/http-hook";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { getUserPlaces } from "../../services/places";
 
 function UserPlaces() {
   const { userId } = useParams();
+  const [places, setPlaces] = useState([]);
+  const { isLoading, error, clearError, sendRequest } = useHttp();
+
+  useEffect(() => {
+    const fetchUserPlaces = async () => {
+      const response = await sendRequest({
+        fn: getUserPlaces,
+        params: { userId },
+      });
+      setPlaces(response?.data?.places);
+    };
+    fetchUserPlaces();
+  }, [sendRequest, userId]);
+
+  const placeDeletedHandler = (deletedPlaceId) => {
+    setPlaces((prevPlaces) =>
+      prevPlaces.filter((place) => place.id !== deletedPlaceId)
+    );
+  };
+
   return (
-    <PlaceList
-      items={DUMMY_PLACES?.filter((place) => place.creator === userId)}
-    />
+    <>
+      {/* <ErrorModal error={error} onClear={clearError} /> */}
+      {isLoading ? (
+        <div className="center">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <PlaceList items={places} onDeletePlace={placeDeletedHandler} />
+      )}
+    </>
   );
 }
 

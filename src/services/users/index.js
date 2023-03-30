@@ -11,7 +11,7 @@ export const getAllUsers = async () => {
   }
 };
 
-export const registerUser = async (payload) => {
+export const registerUser = async ({ payload }) => {
   try {
     let response = await API.post(`${Apis.Signup}`, payload);
     return getApiResponse(response);
@@ -20,7 +20,7 @@ export const registerUser = async (payload) => {
   }
 };
 
-export const loginUser = async (payload) => {
+export const loginUser = async ({ payload }) => {
   try {
     let response = await API.post(`${Apis.Login}`, payload);
     return getApiResponse(response);

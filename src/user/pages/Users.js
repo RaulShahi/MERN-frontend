@@ -12,7 +12,7 @@ function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await sendRequest(getAllUsers);
+        const response = await sendRequest({ fn: getAllUsers });
         setUsers(response?.data?.users);
       } catch (err) {
         console.log(err);
@@ -24,12 +24,13 @@ function Users() {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
+      {isLoading ? (
         <div className="center">
           <LoadingSpinner />
         </div>
+      ) : (
+        <UsersList items={users} />
       )}
-      <UsersList items={users} />
     </>
   );
 }

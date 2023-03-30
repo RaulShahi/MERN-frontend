@@ -55,12 +55,15 @@ function Auth() {
     const { email, name, password } = formState.inputs;
     if (!isLoginMode) {
       try {
-        await sendRequest(registerUser, {
-          email: email?.value,
-          name: name?.value,
-          password: password?.value,
+        const response = await sendRequest({
+          fn: registerUser,
+          payload: {
+            email: email?.value,
+            name: name?.value,
+            password: password?.value,
+          },
         });
-        login();
+        login(response?.data?.user?.id);
         return;
       } catch (err) {
         console.log(err);
@@ -68,11 +71,15 @@ function Auth() {
       }
     }
     try {
-      await sendRequest(loginUser, {
-        email: email?.value,
-        password: password?.value,
+      const response = await sendRequest({
+        fn: loginUser,
+        payload: {
+          email: email?.value,
+          password: password?.value,
+        },
       });
-      login();
+
+      login(response?.data?.user?.id);
     } catch (err) {
       console.log(err);
     }
@@ -110,8 +117,8 @@ function Auth() {
             id="password"
             type="password"
             label="Password"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="Please enter a valid password(at least 5 characters)"
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText="Please enter a valid password(at least 6 characters)"
             onInput={inputHandler}
           />
           <Button type="submit" disabled={!formState.isValid}>
