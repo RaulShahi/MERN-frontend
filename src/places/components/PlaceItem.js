@@ -20,7 +20,7 @@ function PlaceItem({
   creatorId,
 }) {
   const [showMap, setShowMap] = useState(false);
-  const { isLoggedIn, userId } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttp();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);

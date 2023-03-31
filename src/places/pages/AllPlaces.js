@@ -7,6 +7,7 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 function AllPlaces() {
   const [places, setPlaces] = useState([]);
   const { isLoading, sendRequest: getPlaces } = useHttp();
+
   useEffect(() => {
     const fetchAllPlaces = async () => {
       const response = await getPlaces({ fn: getAllPlaces });

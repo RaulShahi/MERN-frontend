@@ -14,6 +14,7 @@ import { loginUser, registerUser } from "../../services/users";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { useHttp } from "../../shared/hooks/http-hook";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 function Auth() {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -34,16 +35,21 @@ function Auth() {
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttp();
+  console.log(formState.inputs);
 
   const switchModeHandler = () => {
     if (!isLoginMode) {
       setFormData(
-        { ...formState.inputs, name: undefined },
+        { ...formState.inputs, name: undefined, image: undefined },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
     } else {
       setFormData(
-        { ...formState.inputs, name: { value: "", isValid: false } },
+        {
+          ...formState.inputs,
+          name: { value: "", isValid: false },
+          image: { value: null, isValid: false },
+        },
         false
       );
     }
@@ -52,6 +58,7 @@ function Auth() {
 
   const authSubmitHandler = async (e) => {
     e.preventDefault();
+    console.log(formState.inputs);
     const { email, name, password } = formState.inputs;
     if (!isLoginMode) {
       try {
@@ -102,6 +109,9 @@ function Auth() {
               errorText="Please enter a name."
               onInput={inputHandler}
             />
+          )}
+          {!isLoginMode && (
+            <ImageUpload center id="image" onInput={inputHandler} />
           )}
           <Input
             element="input"
