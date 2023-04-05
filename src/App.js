@@ -5,7 +5,7 @@ import NewPlace from "./places/pages/NewPlace";
 import UpdatePlace from "./places/pages/UpdatePlace";
 import UserPlaces from "./places/pages/UserPlaces";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
-import { AuthContext, AuthContextWrapper } from "./shared/context/auth-context";
+import { AuthContext } from "./shared/context/auth-context";
 import Auth from "./user/pages/Auth";
 import Users from "./user/pages/Users";
 

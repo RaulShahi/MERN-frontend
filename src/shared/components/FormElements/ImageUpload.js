@@ -42,6 +42,7 @@ function ImageUpload({ id, center, onInput, errorText }) {
     <div className="form-control">
       <input
         id={id}
+        name="image"
         ref={filePickerRef}
         style={{ display: "none" }}
         type="file"

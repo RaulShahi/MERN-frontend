@@ -14,6 +14,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { useHistory } from "react-router-dom";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 function NewPlace() {
   const { userId } = useContext(AuthContext);
@@ -23,23 +24,27 @@ function NewPlace() {
       title: { value: "", isValid: false },
       description: { value: "", isValid: false },
       address: { value: "", isValid: false },
+      image: { value: null, isValid: false },
     },
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttp();
+  console.log(formState?.inputs);
 
   const placeSubmitHandler = async (e) => {
     e.preventDefault();
-    const { title, description, address } = formState?.inputs;
+    const formData = new FormData();
+    const { title, description, address, image } = formState?.inputs;
+    formData.append("title", title?.value);
+    formData.append("description", description?.value);
+    formData.append("address", address?.value);
+    formData.append("image", image?.value);
+    formData.append("creator", userId);
+
     try {
       await sendRequest({
         fn: addPlace,
-        payload: {
-          title: title?.value,
-          description: description?.value,
-          address: address?.value,
-          creator: userId,
-        },
+        payload: formData,
       });
       //Redirect the user to a different page.
       history.replace("/");
@@ -60,6 +65,12 @@ function NewPlace() {
           validators={[VALIDATOR_REQUIRE()]}
           errorText="Please enter a valid title."
           onInput={inputHandler}
+        />
+        <ImageUpload
+          id="image"
+          center
+          onInput={inputHandler}
+          errorText="Please provide an image."
         />
         <Input
           id="description"

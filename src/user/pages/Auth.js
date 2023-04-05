@@ -35,7 +35,6 @@ function Auth() {
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttp();
-  console.log(formState.inputs);
 
   const switchModeHandler = () => {
     if (!isLoginMode) {
@@ -59,16 +58,17 @@ function Auth() {
   const authSubmitHandler = async (e) => {
     e.preventDefault();
     console.log(formState.inputs);
-    const { email, name, password } = formState.inputs;
+    const { email, name, password, image } = formState.inputs;
     if (!isLoginMode) {
       try {
+        const formData = new FormData();
+        formData.append("email", email?.value);
+        formData.append("name", name?.value);
+        formData.append("password", password?.value);
+        formData.append("image", image?.value);
         const response = await sendRequest({
           fn: registerUser,
-          payload: {
-            email: email?.value,
-            name: name?.value,
-            password: password?.value,
-          },
+          payload: formData,
         });
         login(response?.data?.user?.id);
         return;
@@ -98,7 +98,7 @@ function Auth() {
         {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
-        <form onSubmit={authSubmitHandler}>
+        <form onSubmit={authSubmitHandler} enctype="multipart/form-data">
           {!isLoginMode && (
             <Input
               element="input"
@@ -111,7 +111,12 @@ function Auth() {
             />
           )}
           {!isLoginMode && (
-            <ImageUpload center id="image" onInput={inputHandler} />
+            <ImageUpload
+              center
+              id="image"
+              onInput={inputHandler}
+              errorText="Please provide an image."
+            />
           )}
           <Input
             element="input"

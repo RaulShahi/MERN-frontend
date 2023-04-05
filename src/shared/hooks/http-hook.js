@@ -13,13 +13,13 @@ export const useHttp = () => {
     try {
       const response = await fn({ payload, params });
       if (!response?.status) {
-        throw new Error(response?.message);
+        throw new Error(response?.data?.message);
       }
       setIsLoading(false);
 
       return response;
     } catch (err) {
-      setError(err.message);
+      setError(err?.message);
       setIsLoading(false);
 
       throw err;
