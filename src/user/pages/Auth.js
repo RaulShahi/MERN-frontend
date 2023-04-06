@@ -70,7 +70,9 @@ function Auth() {
           fn: registerUser,
           payload: formData,
         });
-        login(response?.data?.user?.id);
+        const { id, token } = response?.data?.user;
+
+        login(id, token);
         return;
       } catch (err) {
         console.log(err);
@@ -85,8 +87,10 @@ function Auth() {
           password: password?.value,
         },
       });
+      const { id, token } = response?.data?.user;
+      console.log("response", response?.data?.user);
 
-      login(response?.data?.user?.id);
+      login(id, token);
     } catch (err) {
       console.log(err);
     }
