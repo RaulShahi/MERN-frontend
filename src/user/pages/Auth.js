@@ -57,7 +57,6 @@ function Auth() {
 
   const authSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(formState.inputs);
     const { email, name, password, image } = formState.inputs;
     if (!isLoginMode) {
       try {
@@ -88,7 +87,6 @@ function Auth() {
         },
       });
       const { id, token } = response?.data?.user;
-      console.log("response", response?.data?.user);
 
       login(id, token);
     } catch (err) {

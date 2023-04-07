@@ -29,7 +29,6 @@ function NewPlace() {
     false
   );
   const { isLoading, error, clearError, sendRequest } = useHttp();
-  console.log(formState?.inputs);
 
   const placeSubmitHandler = async (e) => {
     e.preventDefault();
@@ -39,7 +38,7 @@ function NewPlace() {
     formData.append("description", description?.value);
     formData.append("address", address?.value);
     formData.append("image", image?.value);
-    formData.append("creator", userId);
+    // formData.append("creator", userId);
 
     try {
       await sendRequest({
@@ -48,7 +47,9 @@ function NewPlace() {
       });
       //Redirect the user to a different page.
       history.replace("/");
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

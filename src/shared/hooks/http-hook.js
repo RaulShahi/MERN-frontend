@@ -1,17 +1,25 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
+import { AuthContext } from "../context/auth-context";
 
 export const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const { token } = useContext(AuthContext);
 
   const clearError = () => {
     setError(null);
   };
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const sendRequest = useCallback(async ({ fn, payload, params }) => {
     setIsLoading(true);
     try {
-      const response = await fn({ payload, params });
+      const response = await fn({ payload, params, config });
       if (!response?.status) {
         throw new Error(response?.data?.message);
       }
