@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useReducer } from "react";
+import React from "react";
 
 import Input from "../../shared/components/FormElements/Input";
 import {
@@ -10,14 +10,12 @@ import Button from "../../shared/components/FormElements/Button";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttp } from "../../shared/hooks/http-hook";
 import { addPlace } from "../../services/places";
-import { AuthContext } from "../../shared/context/auth-context";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { useHistory } from "react-router-dom";
 import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 
 function NewPlace() {
-  const { userId } = useContext(AuthContext);
   const history = useHistory();
   const [formState, inputHandler] = useForm(
     {
@@ -38,7 +36,6 @@ function NewPlace() {
     formData.append("description", description?.value);
     formData.append("address", address?.value);
     formData.append("image", image?.value);
-    // formData.append("creator", userId);
 
     try {
       await sendRequest({
