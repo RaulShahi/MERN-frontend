@@ -16,7 +16,6 @@ export const addPlace = async ({ payload, config }) => {
     const response = await API.post(`${Apis.Places}`, payload, config);
     return getApiResponse(response);
   } catch (err) {
-    console.log({ err });
     return getApiResponse(err?.response);
   }
 };

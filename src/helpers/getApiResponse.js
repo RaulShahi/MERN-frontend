@@ -1,5 +1,4 @@
 export const getApiResponse = (response) => {
-  console.log("response", response);
   const status =
     response?.status === 200 ||
     response?.status === 201 ||
