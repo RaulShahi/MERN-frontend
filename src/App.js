@@ -13,6 +13,7 @@ const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 const Auth = React.lazy(() => import("./user/pages/Auth"));
 
 function App() {
+  //push from new laptop
   const { token, logout, login, userId } = useAuth();
   let routes;
 
